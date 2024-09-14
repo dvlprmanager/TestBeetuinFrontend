@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/apiServices';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { BaseUrl } from '../services/BaseUrl';
+import { toast } from 'react-toastify';
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -31,11 +33,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', tokenString);
         localStorage.setItem('uid', uid);
 
-        console.log('Login exitoso:', uid);
+        toast.success('Login exitoso');
         navigate('/');
+      } else {
+        console.log(response);
+        console.log("entro ");
+        toast.error('Fallo al iniciar sesión: ' + response.msg);
       }
     } catch (error) {
-      console.error('Error en login:', error);
+      toast.error('Error en login: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -47,15 +53,17 @@ export const AuthProvider = ({ children }) => {
       const response = await apiService(`${BaseUrl}/auth/new`, 'POST', data);
       if (response.token) {
         const tokenString = String(response.token);
-        await setIsAuthenticated(true);
-        await setToken(tokenString);
-        await localStorage.setItem('token', tokenString);
-        console.log('Registro exitoso:', response);
-        console.log(tokenString);
-        await navigate('/');
+        setIsAuthenticated(true);
+        setToken(tokenString);
+        localStorage.setItem('token', tokenString);
+
+        toast.success('Registro exitoso');
+        navigate('/');
+      } else {
+        toast.error('Fallo en el registro: ' + response.message);
       }
     } catch (error) {
-      console.error('Error en registro:', error);
+      toast.error('Error en registro: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -66,7 +74,8 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('uid');
-    console.log('Logout exitoso');
+
+    toast.success('Logout exitoso');
     navigate('/auth/login');
   };
 

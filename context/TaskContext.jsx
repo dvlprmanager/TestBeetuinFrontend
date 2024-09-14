@@ -27,7 +27,7 @@ export const TaskProvider = ({ children }) => {
       setTasks(result.Tareas);
       console.log(result);
     } catch (error) {
-      toast.error('Error Al obtener datos: ' + error.message);
+      console.log('Error Al obtener datos: ' + error.message);
     } finally {
       setLoading(false);
     }

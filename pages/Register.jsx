@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';  // Importa los íconos de Bootstrap
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -22,6 +23,10 @@ const Register = () => {
     } catch (error) {
       console.error('Error al registrar:', error);
     }
+  };
+
+  const handleBack = () => {
+    navigate('/auth/login');
   };
 
   return (
@@ -60,8 +65,12 @@ const Register = () => {
               {errors.password && <p className="text-danger">{errors.password.message}</p>}
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="w-100">
+            <Button variant="primary" type="submit" className="w-100 mb-3">
               Registrarse
+            </Button>
+
+            <Button variant="secondary" className="w-100" onClick={handleBack}>
+              <i className="bi bi-arrow-left me-2"></i> Regresar
             </Button>
           </Form>
         </Col>

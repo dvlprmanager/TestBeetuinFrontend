@@ -11,7 +11,10 @@ const Login = () => {
     const onSubmit = (data) => {
         console.log(data);
         login(data);
-        
+    };
+
+    const handleRegister = () => {
+        navigate('/auth/register');
     };
 
     return (
@@ -35,13 +38,20 @@ const Login = () => {
                             <Form.Control
                                 type="password"
                                 placeholder="Ingresa tu contraseña"
-                                {...register('password', { required: 'La contraseña es requerida' })}
+                                {...register('password', {
+                                    required: 'La contraseña es requerida',
+                                    minLength: { value: 6, message: 'La contraseña debe tener al menos 6 caracteres' }
+                                })}
                             />
                             {errors.password && <p className="text-danger">{errors.password.message}</p>}
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" className="w-100">
+                        <Button variant="primary" type="submit" className="w-100 mb-2">
                             Iniciar Sesión
+                        </Button>
+
+                        <Button variant="secondary" className="w-100" onClick={handleRegister}>
+                            Registrarse
                         </Button>
                     </Form>
                 </Col>
